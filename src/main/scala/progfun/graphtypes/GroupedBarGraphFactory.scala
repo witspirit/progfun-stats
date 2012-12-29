@@ -3,13 +3,6 @@ package progfun.graphtypes
 import progfun.data.Utilities
 import java.io.File
 
-/**
- * Created with IntelliJ IDEA.
- * User: witspirit
- * Date: 29/12/12
- * Time: 19:00
- * To change this template use File | Settings | File Templates.
- */
 abstract class GroupedBarGraphFactory extends GraphFactory with Utilities {
    /** label for the y-axis */
    def label: String
