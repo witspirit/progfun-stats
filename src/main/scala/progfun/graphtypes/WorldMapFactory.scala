@@ -1,7 +1,9 @@
-package progfun
+package progfun.graphtypes
 
 import java.io.File
 import scala.io.Source
+import progfun.data.{Utilities, CourseraData}
+import CourseraData._
 
 /* Required data input files:
  * dat/countries.dat, dat/allCountries.tsv, dat/populationByIso3.tsv

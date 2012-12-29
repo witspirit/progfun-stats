@@ -1,4 +1,4 @@
-package progfun
+package progfun.data
 
 import java.io._
 import scala.io.Source
@@ -38,6 +38,8 @@ object CourseraData extends Utilities {
   val total = users.length
 
   val didntFinish = users.filter(user => !user.finishedCourse)
+
+  val finished = users.filter(user => user.finishedCourse)
 
   val ages              = users.map(_.age)
   val countries         = users.map(_.country)

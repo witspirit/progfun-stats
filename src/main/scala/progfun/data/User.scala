@@ -1,4 +1,4 @@
-package progfun
+package progfun.data
 
 /** Survey responses for a single user registered for the course.
  */

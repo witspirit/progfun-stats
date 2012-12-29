@@ -1,5 +1,8 @@
 package progfun
 
+import data.{User, CourseraData}
+import graphtypes._
+
 /** object representing a *grouped* bar graph of students'
  *  experience with other programming languages and paradigms
  */
@@ -431,9 +434,9 @@ object WorthItBarGraph extends SimpleBarGraphFactory with App {
   writeHtml()
 }
 
-/** Shortcut for generating all graphs.
+/** Shortcut for generating all graphtypes.
  *  Add any new graph to this list, and in sbt,
- *  run progfun.ProgfunStats to generate all graphs
+ *  run progfun.ProgfunStats to generate all graphtypes
  */
 object ProgfunStats extends App {
   List[GraphFactory with App](

@@ -1,6 +1,7 @@
-package progfun
+package progfun.graphtypes
 
 import java.io._
+import progfun.data.Utilities
 
 abstract class PieChartFactory extends GraphFactory with Utilities {
 

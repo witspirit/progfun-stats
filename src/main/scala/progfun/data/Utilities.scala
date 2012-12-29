@@ -1,4 +1,4 @@
-package progfun
+package progfun.data
 
 import java.io.{File, PrintWriter}
 
