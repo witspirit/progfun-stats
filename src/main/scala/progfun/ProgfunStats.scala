@@ -206,20 +206,6 @@ object EducationDifficultyBarGraph extends GroupedBarGraphFactory with App {
   writeHtml()
 }
 
-/** object representing the plot of population density vs the world map
- */
- // please note that WorldMapFactory needs a bit of reorganization
- // so be aware that it might soon be revised a bit.
- // after reorganization, you will be provided with a list of ISOs,
- // and you will have to provide values (AnyVal) associated with each
- // and implement a field called `data` as with other Factories
-object WorldMapDensityGraph extends WorldMapFactory with App {
-
-  /* file name to output to */
-  val name = "worldmap-density.html"
-  writeHtml()
-}
-
 /** object representing a *simple* bar graph of students'
  *  highest level of education
  */
@@ -444,13 +430,13 @@ object ProgfunStats extends App {
     ExperienceDifficultyBarGraph,
     BackgroundDifficultyBarGraph,
     EducationDifficultyBarGraph,
-    WorldMapDensityGraph,
     EducationBarGraph,
     WhereApplyPieChart,
     WhatInterestedYouPieChart,
     EditorGroupedBarGraph,
     FollowupCourseBarGraph,
-    WorthItBarGraph
+    WorthItBarGraph,
+    FlexWorldMapDensityGraph
     ).foreach { graph =>
       graph.main(Array())
       println("generated " + graph.name)
