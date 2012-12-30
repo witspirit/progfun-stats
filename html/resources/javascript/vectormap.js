@@ -9,7 +9,7 @@ $('#map').vectorMap({
     regions: [{
       values: density,
       scale: ['#ffffff', '#330066'],
-      normalizeFunction: 'polynomial',
+      normalizeFunction: 'polynomial'
     }]
   },
   onRegionLabelShow: function(e, el, code){
