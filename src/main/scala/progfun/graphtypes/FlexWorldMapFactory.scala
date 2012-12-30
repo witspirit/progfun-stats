@@ -14,36 +14,17 @@ case class CountryDetailSpec(title: String, property: String, style: Option[Stri
   */
 abstract class FlexWorldMapFactory extends GraphFactory with Utilities {
 
-  val studentCountByIso : Map[String, Int] = getFreqs(CourseraData.countries).map { case (countryName, frequency) => (Countries.countryByName(countryName).iso, frequency)}.toMap
-
-  val studentCountForAllCountries : List[(String, Int)] = Countries.countries.map { country =>
-    (country.iso, studentCountByIso.getOrElse (country.iso, 0))
-  }
-
-  val data = studentCountForAllCountries.map {
-    case (iso, count) =>
-      val population = Countries.countryByIso(iso).population
-
-      val studentDensity = if (population.isEmpty) 0 else count / population.get.toDouble
-
-      val mapDetail = "{ count: "+count+", population: "+population.getOrElse(0L)+" }"
-
-      (iso, studentDensity, mapDetail)
-  }
-
-  val isoCode = data.map(_._1)
-  val studentDensity = data.map(_._2)
-  val mapDetail = data.map(_._3)
+  def details : List[CountryDetailSpec] // Describes the fields that will be displayed in the country hover - will extract data from details
+  def countryDetails : List[(String, String)] // The dataset for usage in the country hover
+  def countryDensities : List[(String, Any)] // The dataset that is used to display the color codings in the map
 
   // output to directory "html"
   /* Required files: jquery-jvectormap, ../dat/worldmap.js,
    *                 resources/javascript/vectormap.js
    */
   def writeHtml() {
-    val details: List[CountryDetailSpec] = List(CountryDetailSpec("Number of Students", "count", None), CountryDetailSpec("Population", "population", Some("opacity: 0.5;")))
-
-    generateIsoToValueJs(isoCode zip studentDensity, "density", "html/worldmap-density.js")
-    generateIsoToValueJs(isoCode zip mapDetail, "countryDetails", "html/countryDetails.js")
+    generateIsoToValueJs(countryDensities, "density", "html/worldmap-density.js")
+    generateIsoToValueJs(countryDetails, "countryDetails", "html/countryDetails.js")
     generateDetailDescriptionJs(details, "html/detailDescription.js")
 
     val html =

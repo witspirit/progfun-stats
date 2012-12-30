@@ -34,7 +34,6 @@ $('#map').vectorMap({
                     detailStr += "</span>";
                 }
             }
-
         }
 
         el.html("<span style='font-size: 16px'><b>" + el.html() + "</b></span>" + detailStr);
