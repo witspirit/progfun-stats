@@ -436,7 +436,7 @@ object ProgfunStats extends App {
     EditorGroupedBarGraph,
     FollowupCourseBarGraph,
     WorthItBarGraph,
-    FlexWorldMapDensityGraph
+    WorldMapDensityGraph
     ).foreach { graph =>
       graph.main(Array())
       println("generated " + graph.name)
