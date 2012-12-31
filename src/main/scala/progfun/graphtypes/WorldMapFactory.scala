@@ -1,9 +1,8 @@
 package progfun.graphtypes
 
 import java.io.File
-import progfun.data.{Country, Utilities, CourseraData, Countries}
+import progfun.data.{Country, Utilities, Countries}
 
-case class CountryDetailSpec(title: String, property: String, style: Option[String], values: Map[String, Any])
 
 /* Required data input files:
   * dat/countries.dat, dat/allCountries.tsv, dat/populationByIso3.tsv
@@ -14,22 +13,27 @@ case class CountryDetailSpec(title: String, property: String, style: Option[Stri
   */
 abstract class WorldMapFactory extends GraphFactory with Utilities {
 
-  val worldInfo : Map[String, Country] = Countries.countryByIso
+  type ValueProvider = Country => Any
+
+  case class CountryDetailSpec(title: String, property: String, style: Option[String], valueProvider : ValueProvider)
+
+  private val worldInfo : Map[String, Country] = Countries.countryByIso
 
   def details : List[CountryDetailSpec] // Describes the fields that will be displayed in the country hover - will extract data from details
-  def countryDensities : Map[String, Any] // The dataset that is used to display the color codings in the map
+  val countryDensities : ValueProvider // The dataset that is used to display the color codings in the map
 
   // output to directory "html"
   /* Required files: jquery-jvectormap, ../dat/worldmap.js,
    *                 resources/javascript/vectormap.js
    */
   def writeHtml() {
-    generateIsoToValueJs(countryDensities.toList, "density", "html/worldmap-density.js")
+    val densities = worldInfo.map { case (iso, country) => (iso, countryDensities(country)) }.toList
+
+    generateIsoToValueJs(densities, "density", "html/worldmap-density.js")
 
     val countryDetails = worldInfo.map { case (iso, country) =>
-        val properties = details.map { spec => spec.property + ": \"" + spec.values(iso) + "\"" }
-        val detail = "{" + properties.mkString(", ") + "}"
-        (iso, detail)
+        val properties = details.map { spec => spec.property + ": \"" + spec.valueProvider(country) + "\"" }
+        (iso, properties.mkString("{", ", ", "}"))
     }.toList
 
     generateIsoToValueJs(countryDetails, "countryDetails", "html/countryDetails.js")
@@ -61,24 +65,18 @@ abstract class WorldMapFactory extends GraphFactory with Utilities {
     printToFile(new File(outputLoc)) { p =>
         val dataItems = data.map {
           case (iso, value) => "\"" + iso + "\": " + value
-        }.mkString(",\n")
+        }.mkString("var "+varName+" = {\n",",\n", "};")
 
-        p.println("var "+varName+" = {")
         p.println(dataItems)
-        p.println("};")
     }
   }
 
   def generateDetailDescriptionJs(details: List[CountryDetailSpec], outputLoc: String) {
       val detailElements = details.map { case CountryDetailSpec(title, property, style, values) =>
         "{ title: \""+title+"\",\n  property: \""+property+"\",\n  style: "+style.map("\"" + _ + "\"\n").getOrElse("undefined\n") + "}"
-      }.mkString(",\n")
+      }.mkString("var details = [\n",",\n", "];")
 
-    printToFile(new File(outputLoc)) { p =>
-      p.println("var details = [")
-      p.println(detailElements)
-      p.println("];")
-    }
+    printToFile(new File(outputLoc)) { p => p.println(detailElements) }
   }
 
 }

@@ -1,23 +1,30 @@
 package progfun
 
-import data.{Countries, CourseraData}
-import graphtypes.{CountryDetailSpec, WorldMapFactory}
+import data.{Country, CourseraData}
+import graphtypes.WorldMapFactory
 
 object WorldMapDensityGraph extends WorldMapFactory with App{
 
-  private val totalStudentCountByIso : Map[String, Int] = worldInfo.map { case (iso, country) => (iso, (getFreqs(CourseraData.countries).toMap).getOrElse(country.fullName, 0))  }
-  private val populationByIso : Map[String, Long] = worldInfo.map { case (iso, country) => (iso, country.population.getOrElse(0L)) }
-  private val studentDensityByIso : Map[String, Double] = worldInfo.map { case (iso, country) => (iso, if (populationByIso(iso) == 0L) 0.0 else totalStudentCountByIso(iso) / populationByIso(iso).toDouble)}
+  private val studentCounts = getFreqs(CourseraData.countries).toMap
+
+  private def totalStudentCount(country: Country) : Int = studentCounts.getOrElse(country.fullName, 0)
+  private def population(country: Country) : Long = country.population.getOrElse(0L)
+
+  private def studentDensity(country: Country) : Double =
+    if (population(country) == 0L)
+      0.0
+    else
+      totalStudentCount(country) / population(country).toDouble
 
   /* file name to output to */
   val name = "worldmap-density.html"
 
   val details: List[CountryDetailSpec] = List(
-    CountryDetailSpec("Number of Students", "count", None, totalStudentCountByIso),
-    CountryDetailSpec("Population", "population", Some("opacity: 0.5;"), populationByIso)
+    CountryDetailSpec("Number of Students", "count", None, totalStudentCount),
+    CountryDetailSpec("Population", "population", Some("opacity: 0.5;"), population)
   )
 
-  val countryDensities = studentDensityByIso
+  val countryDensities = studentDensity _
 
   writeHtml()
 }

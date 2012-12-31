@@ -1,30 +1,34 @@
 package progfun
 
-import data.{Countries, CourseraData}
-import graphtypes.{CountryDetailSpec, WorldMapFactory}
+import data.{Country, CourseraData}
+import graphtypes.WorldMapFactory
 
-object FinishedWorldMapDensityGraph extends WorldMapFactory with App{
+object FinishedWorldMapDensityGraph extends WorldMapFactory with App {
 
-  private val totalStudentCountByIso : Map[String, Int] = worldInfo.map { case (iso, country) => (iso, (getFreqs(CourseraData.countries).toMap).getOrElse(country.fullName, 0))  }
-  private val finishedStudentCountByIso : Map[String, Int] = worldInfo.map { case (iso, country) => (iso, (getFreqs(CourseraData.finished.map(_.country)).toMap).getOrElse(country.fullName, 0))}
-  private val populationByIso : Map[String, Long] = worldInfo.map { case (iso, country) => (iso, country.population.getOrElse(0L)) }
-  private val studentDensityByIso : Map[String, Double] = worldInfo.map { case (iso, country) =>
-    (iso,
-     if (populationByIso(iso) == 0L)
-       0.0
-     else
-       finishedStudentCountByIso(iso) / populationByIso(iso).toDouble
-    )}
+  private val totalStudentCounts = getFreqs(CourseraData.countries).toMap
+  private val finishedStudentCounts = getFreqs(CourseraData.finished.map(_.country)).toMap
 
-   /* file name to output to */
-   val name = "worldmap-finisheddensity.html"
+  private def totalStudentCount(country: Country): Int = totalStudentCounts.getOrElse(country.fullName, 0)
+  private def finishedStudentCount(country: Country): Int = finishedStudentCounts.getOrElse(country.fullName, 0)
+  private def population(country: Country): Long = country.population.getOrElse(0L)
 
-   val details: List[CountryDetailSpec] = List(
-     CountryDetailSpec("Number of Students that finished the course", "finishedCount", None, finishedStudentCountByIso),
-     CountryDetailSpec("Total number of students", "totalCount", None, totalStudentCountByIso),
-     CountryDetailSpec("Population", "population", Some("opacity: 0.5;"), populationByIso))
+  private def studentDensity(country: Country): Double =
+    if (population(country) == 0L)
+      0.0
+    else
+      finishedStudentCount(country) / population(country).toDouble
 
-   val countryDensities = studentDensityByIso
 
-   writeHtml()
- }
+  /* file name to output to */
+  val name = "worldmap-finisheddensity.html"
+
+  val details: List[CountryDetailSpec] = List(
+    CountryDetailSpec("Number of Students that finished the course", "finishedCount", None, finishedStudentCount),
+    CountryDetailSpec("Total number of students", "totalCount", None, totalStudentCount),
+    CountryDetailSpec("Population", "population", Some("opacity: 0.5;"), population)
+  )
+
+  val countryDensities = studentDensity _
+
+  writeHtml()
+}
