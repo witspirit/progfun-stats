@@ -29,15 +29,19 @@ abstract class WorldMapFactory extends GraphFactory with Utilities {
   def writeHtml() {
     val densities = worldInfo.map { case (iso, country) => (iso, countryDensities(country)) }.toList
 
-    generateIsoToValueJs(densities, "density", "html/worldmap-density.js")
+    val densityFileName = name+"-density.js"
+    val countryDetailsFileName = name+"-countryDetails.js"
+    val detailDescriptionFileName = name+"-detailDescription.js"
+
 
     val countryDetails = worldInfo.map { case (iso, country) =>
         val properties = details.map { spec => spec.property + ": \"" + spec.valueProvider(country) + "\"" }
         (iso, properties.mkString("{", ", ", "}"))
     }.toList
 
-    generateIsoToValueJs(countryDetails, "countryDetails", "html/countryDetails.js")
-    generateDetailDescriptionJs(details, "html/detailDescription.js")
+    generateIsoToValueJs(densities, "density", "html/"+densityFileName)
+    generateIsoToValueJs(countryDetails, "countryDetails", "html/"+countryDetailsFileName)
+    generateDetailDescriptionJs(details, "html/"+detailDescriptionFileName)
 
     val html =
       <html>
@@ -46,9 +50,9 @@ abstract class WorldMapFactory extends GraphFactory with Utilities {
           <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
           <script src="resources/javascript/jquery-jvectormap-1.1.1.min.js"></script>
           <script src="../dat/worldmap.js"></script>
-          <script src="worldmap-density.js"></script>
-          <script src="detailDescription.js"></script>
-          <script src="countryDetails.js"></script>
+          <script src={densityFileName}></script>
+          <script src={detailDescriptionFileName}></script>
+          <script src={countryDetailsFileName}></script>
           <script src="http://d3js.org/d3.v3.min.js"></script>
           <link href="resources/stylesheets/jquery-jvectormap-1.1.1.css" rel="stylesheet" type="text/css"/>
         </head>
@@ -57,7 +61,7 @@ abstract class WorldMapFactory extends GraphFactory with Utilities {
           <script src="resources/javascript/vectormap.js" type="text/javascript"></script>
         </body>
       </html>
-    printToFile(new File(new File("html"), name))(writer => writer.println(html.toString()))
+    printToFile(new File(new File("html"), name+".html"))(writer => writer.println(html.toString()))
   }
 
   // takes a list of pairs of country ISO and some value and writes it to a file

@@ -10,7 +10,7 @@ object ExperienceBarGraph extends GroupedBarGraphFactory with App {
   import CourseraData._
 
   /* file name to output to */
-  val name = "experience.html"
+  val name = "experience"
 
   /* label for the y-axis */
   def label: String = "Percentage"
@@ -50,7 +50,7 @@ object ExperienceDifficultyBarGraph extends GroupedBarGraphFactory with App {
   import CourseraData.users
 
   /* file name to output to */
-  val name = "experience-vs-difficulty.html"
+  val name = "experience-vs-difficulty"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 450
@@ -99,7 +99,7 @@ object BackgroundDifficultyBarGraph extends GroupedBarGraphFactory with App {
   import CourseraData.users
 
   /* file name to output to */
-  val name = "background-vs-difficulty.html"
+  val name = "background-vs-difficulty"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 450
@@ -154,7 +154,7 @@ object EducationDifficultyBarGraph extends GroupedBarGraphFactory with App {
   import CourseraData.users
 
   /* file name to output to */
-  val name = "education-vs-difficulty.html"
+  val name = "education-vs-difficulty"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 800
@@ -213,7 +213,7 @@ object EducationBarGraph extends SimpleBarGraphFactory with App {
   import CourseraData.degrees
 
   /* file name to output to */
-  val name = "education.html"
+  val name = "education"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 450
@@ -266,7 +266,7 @@ object EducationBarGraph extends SimpleBarGraphFactory with App {
  */
 object WhatInterestedYouPieChart extends PieChartFactory with App {
   /* file name to output to */
-  val name = "what-interested-you.html"
+  val name = "what-interested-you"
 
  /* this represents the data that goes into your pie chart
   * where the String is the label, and the Int is the
@@ -280,7 +280,7 @@ object WhatInterestedYouPieChart extends PieChartFactory with App {
  */
 object WhereApplyPieChart extends PieChartFactory with App {
   /* file name to output to */
-  val name = "where-apply.html"
+  val name = "where-apply"
 
  /* this represents the data that goes into your pie chart
     where the String is the label, and the Int is the
@@ -297,7 +297,7 @@ object EditorGroupedBarGraph extends GroupedBarGraphFactory with App {
   import CourseraData.{ prefEditor, courseEditor, total }
 
   /* file name to output to */
-  val name = "editors.html"
+  val name = "editors"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 500
@@ -356,7 +356,7 @@ object FollowupCourseBarGraph extends SimpleBarGraphFactory with App {
   import CourseraData.followupCourse
 
   /* file name to output to */
-  val name = "followup-course.html"
+  val name = "followup-course"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 250
@@ -392,7 +392,7 @@ object WorthItBarGraph extends SimpleBarGraphFactory with App {
   import CourseraData.worthIt
 
   /* file name to output to */
-  val name = "worth-it.html"
+  val name = "worth-it"
 
   /* width and height of final plot. Overrides default of 960 x 480 */
   override val width = 250
@@ -436,7 +436,8 @@ object ProgfunStats extends App {
     EditorGroupedBarGraph,
     FollowupCourseBarGraph,
     WorthItBarGraph,
-    WorldMapDensityGraph
+    WorldMapDensityGraph,
+    FinishedWorldMapDensityGraph
     ).foreach { graph =>
       graph.main(Array())
       println("generated " + graph.name)

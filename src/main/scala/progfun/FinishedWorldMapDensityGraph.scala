@@ -20,7 +20,7 @@ object FinishedWorldMapDensityGraph extends WorldMapFactory with App {
 
 
   /* file name to output to */
-  val name = "worldmap-finisheddensity.html"
+  val name = "worldmap-finisheddensity"
 
   val details: List[CountryDetailSpec] = List(
     CountryDetailSpec("Number of Students that finished the course", "finishedCount", None, finishedStudentCount),

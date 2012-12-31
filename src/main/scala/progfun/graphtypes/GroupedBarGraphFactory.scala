@@ -47,6 +47,6 @@ abstract class GroupedBarGraphFactory extends GraphFactory with Utilities {
          </script>
          </body>
        </html>
-     printToFile(new File(new File("html"), name))(writer => writer.println(html.toString))
+     printToFile(new File(new File("html"), name+".html"))(writer => writer.println(html.toString))
    }
  }

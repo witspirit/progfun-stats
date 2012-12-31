@@ -17,7 +17,7 @@ object WorldMapDensityGraph extends WorldMapFactory with App{
       totalStudentCount(country) / population(country).toDouble
 
   /* file name to output to */
-  val name = "worldmap-density.html"
+  val name = "worldmap-density"
 
   val details: List[CountryDetailSpec] = List(
     CountryDetailSpec("Number of Students", "count", None, totalStudentCount),
